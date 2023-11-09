@@ -52,6 +52,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 Happy travels! 🌍✈️📸
 ```
 
-You can copy and paste this Markdown content into your README.md file on GitHub. Don't forget to replace `your-username` with your actual GitHub username and provide additional details as needed.
-
 
