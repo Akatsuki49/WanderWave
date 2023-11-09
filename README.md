@@ -15,7 +15,7 @@ Welcome to the Travel Planner & Diary App 🌍✈️, your ideal companion for o
 1. **Clone this repository:**
 
    ```bash
-   https://github.com/Akatsuki49/WanderWave
+   git clone https://github.com/Akatsuki49/WanderWave
    ```
 
 2. **Navigate to the project folder:**
