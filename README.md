@@ -50,6 +50,5 @@ Ready for your next adventure? Here's how to use the app:
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 Happy travels! 🌍✈️📸
-```
 
 
