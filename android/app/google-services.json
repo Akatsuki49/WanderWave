@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "627877852836",
+    "project_id": "wanderwave-faf5a",
+    "storage_bucket": "wanderwave-faf5a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627877852836:android:9b9511e0e3aa3d47809831",
+        "android_client_info": {
+          "package_name": "com.example.wanderwave"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "627877852836-85b8g4rgoe0btgn8r1g8gu1pt6q4dd23.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.wanderwave",
+            "certificate_hash": "8d4cca59f73a51b484d74a35c6a7cff900d7ccc3"
+          }
+        },
+        {
+          "client_id": "627877852836-utnoev93jjof89sn84fl0i6ai8rvgi8u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1NFlwjVc9KT0YcReXE_hvA09adOuPm2k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "627877852836-utnoev93jjof89sn84fl0i6ai8rvgi8u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "627877852836-amg05dh8449mcl61bdfrev2dnnp3bj7t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wanderwave.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
