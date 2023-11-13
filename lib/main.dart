@@ -1,56 +1,56 @@
-// lib/main.dart
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'screens/profile_screen.dart';
-import 'screens/itinerary_screen.dart';
-import 'screens/diary_screen.dart';
-import 'screens/expenses_screen.dart';
-import './widgets/bottom_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:wanderwave/firebase_options.dart';
+import 'package:wanderwave/screens/auth/login_screen.dart';
+import 'package:wanderwave/screens/home_screen.dart';
+import 'package:wanderwave/services/firebase_auth_methods.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+    return MultiProvider(
+      providers: [
+        Provider<FirebaseAuthMethods>(
+          create: (_) => FirebaseAuthMethods(FirebaseAuth.instance),
+        ),
+        StreamProvider(
+          create: (context) => context.read<FirebaseAuthMethods>().authState,
+          initialData: null,
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: const AuthWrapper(),
+        theme: ThemeData(
+          textTheme: GoogleFonts.poppinsTextTheme(),
+        ),
+      ),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _screens = [
-    ProfileScreen(),
-    ItineraryScreen(),
-    DiaryScreen(),
-    ExpensesScreen(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Travel App'),
-      ),
-      body: _screens[_selectedIndex],
-      bottomNavigationBar:
-          BottomNavigationBarWidget(_selectedIndex, _onItemTapped),
-    );
+    final firebaseUser = context.watch<User?>();
+
+    if (firebaseUser != null) {
+      return HomeScreen();
+    } else {
+      return const LoginScreen();
+    }
   }
 }
