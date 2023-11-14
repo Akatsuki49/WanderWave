@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
+  final TextInputType textInputType;
 
   const AuthTextField({
     Key? key,
     required this.controller,
     required this.hintText,
+    this.textInputType = TextInputType.text,
   }) : super(key: key);
 
   @override
@@ -15,6 +17,7 @@ class AuthTextField extends StatelessWidget {
     return SizedBox(
       child: TextField(
         controller: controller,
+        keyboardType: textInputType,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(25),
