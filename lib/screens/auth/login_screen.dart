@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:wanderwave/screens/auth/login_email_screen.dart';
+import 'package:wanderwave/screens/auth/phone_sign_in_screen.dart';
 import 'package:wanderwave/screens/auth/signup_email_screen.dart';
 import 'package:wanderwave/services/firebase_auth_methods.dart';
 import 'package:wanderwave/widgets/auth_icon_button.dart';
@@ -63,7 +64,13 @@ class _LoginScreenState extends State<LoginScreen> {
               labelText: 'Sign in with Phone',
               isSvg: false,
               icon: Icons.phone,
-              onPress: () {},
+              onPress: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) {
+                    return const PhoneSignInScreen();
+                  },
+                ));
+              },
             ),
             const OrDivider(),
             AuthIconButton(

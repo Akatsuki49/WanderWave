@@ -14,25 +14,40 @@ class ProfileScreen extends StatelessWidget {
       context.read<FirebaseAuthMethods>().signOut(context);
     }
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text('Profile Screen'),
-          const SizedBox(height: 20),
-          Text(user.email!),
-          const SizedBox(height: 20),
-          //Text(user.displayName!),
-          const SizedBox(height: 20),
-          Text(user.uid),
-          const SizedBox(height: 20),
-          AuthIconButton(
-            labelText: 'Sign Out',
-            isSvg: false,
-            onPress: onSignOut,
-            icon: Icons.sign_language,
-          )
-        ],
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Profile Screen',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+              ),
+            ),
+            const SizedBox(height: 50),
+            if (user.email != null) ...[
+              const SizedBox(height: 20),
+              Text(user.email!),
+            ],
+            if (user.displayName != null) ...[
+              const SizedBox(height: 20),
+              Text(user.displayName!),
+            ],
+            if (user.phoneNumber != null) ...[
+              const SizedBox(height: 20),
+              Text(user.phoneNumber!),
+            ],
+            const SizedBox(height: 20),
+            AuthIconButton(
+              labelText: 'Sign Out',
+              isSvg: false,
+              onPress: onSignOut,
+              icon: Icons.sign_language,
+            ),
+          ],
+        ),
       ),
     );
   }
