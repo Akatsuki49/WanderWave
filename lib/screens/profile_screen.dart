@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wanderwave/screens/expenses_screen.dart';
 import 'package:wanderwave/services/firebase_auth_methods.dart';
 import 'package:wanderwave/widgets/auth_icon_button.dart';
 
@@ -12,6 +13,15 @@ class ProfileScreen extends StatelessWidget {
 
     void onSignOut() {
       context.read<FirebaseAuthMethods>().signOut(context);
+    }
+
+    void gotoexpenses() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ExpensesScreen(),
+        ),
+      );
     }
 
     return Scaffold(
@@ -45,6 +55,13 @@ class ProfileScreen extends StatelessWidget {
               isSvg: false,
               onPress: onSignOut,
               icon: Icons.sign_language,
+            ),
+            const SizedBox(height: 20),
+            AuthIconButton(
+              labelText: 'Expenses Page',
+              isSvg: false,
+              onPress: gotoexpenses,
+              icon: Icons.money_rounded,
             ),
           ],
         ),
