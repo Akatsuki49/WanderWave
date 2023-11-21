@@ -40,6 +40,14 @@ dependencies:
   firebase_auth: ^4.13.0
   google_sign_in: ^6.1.6
   provider: ^6.1.1
+  firebase_storage: ^11.5.1
+  image_picker: ^1.0.4
+  cloud_firestore: ^4.13.1
+  multi_image_picker: ^4.8.01
+  flutter_staggered_grid_view: ^0.4.0
+  cached_network_image: ^3.3.0
+  sqflite: ^2.3.0
+  flutter_neumorphic: ^3.1.0
   uuid: ^4.2.1
   cloud_firestore: ^4.13.1
 

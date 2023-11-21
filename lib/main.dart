@@ -7,16 +7,19 @@ import 'package:wanderwave/firebase_options.dart';
 import 'package:wanderwave/screens/auth/login_screen.dart';
 import 'package:wanderwave/screens/home_screen.dart';
 import 'package:wanderwave/services/firebase_auth_methods.dart';
+import 'package:wanderwave/providers/travel_diary_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -27,6 +30,9 @@ class MyApp extends StatelessWidget {
         StreamProvider(
           create: (context) => context.read<FirebaseAuthMethods>().authState,
           initialData: null,
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TravelDiaryProvider(),
         ),
       ],
       child: MaterialApp(
@@ -48,7 +54,7 @@ class AuthWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User?>();
 
     if (firebaseUser != null) {
-      return HomeScreen();
+      return const HomeScreen();
     } else {
       return const LoginScreen();
     }

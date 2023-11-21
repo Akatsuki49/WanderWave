@@ -6,11 +6,13 @@ class BottomNavigationBarWidget extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;
 
-  BottomNavigationBarWidget(this.selectedIndex, this.onItemTapped);
+  const BottomNavigationBarWidget(this.selectedIndex, this.onItemTapped,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      backgroundColor: Colors.black,
       selectedItemColor: const Color(0xFF0074B7), // Blue color
       unselectedItemColor: Colors.grey,
       items: const <BottomNavigationBarItem>[
@@ -23,9 +25,9 @@ class BottomNavigationBarWidget extends StatelessWidget {
           label: 'Itinerary',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.book),
-          label: 'Diary',
-        ),
+            icon: Icon(Icons.book),
+            label: 'Diary',
+            backgroundColor: Colors.black),
         BottomNavigationBarItem(
           icon: Icon(Icons.attach_money),
           label: 'Expenses',
