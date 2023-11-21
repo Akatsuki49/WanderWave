@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const ProfileScreen(),
     const ItineraryScreen(),
     const TravelDiaryScreen(),
-    const ExpensesScreen(),
+    ExpensesScreen(),
   ];
 
   void _onItemTapped(int index) {
