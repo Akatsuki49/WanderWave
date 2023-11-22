@@ -48,6 +48,7 @@ dependencies:
   sqflite: ^2.3.0
 
   uuid: ^4.2.1
+  intl: ^0.18.1
 
 
 dev_dependencies:

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:wanderwave/Itinerary/itinerary_page.dart';
 import 'package:wanderwave/screens/Diary/diary_screen.dart';
 import 'package:wanderwave/screens/expenses_screen.dart';
 import 'package:wanderwave/screens/itinerary_screen.dart';
 import 'package:wanderwave/screens/profile/profile_screen.dart';
 import 'package:wanderwave/widgets/bottom_bar.dart';
+import 'package:wanderwave/Itinerary/itinerary_page.dart';
+import 'package:wanderwave/Itinerary/itinerary_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     const ProfileScreen(),
-    const ItineraryScreen(),
+    const ItineraryList(),
     const TravelDiaryScreen(),
     ExpensesScreen(),
   ];
