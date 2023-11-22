@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wanderwave/services/firebase_auth_methods.dart';
-import 'package:wanderwave/widgets/chat_screen.dart';
+import 'package:wanderwave/screens/expenses/chat_screen.dart';
 
 class GroupListWidget extends StatelessWidget {
   final List<DocumentSnapshot>? groups;

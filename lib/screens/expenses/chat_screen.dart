@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:wanderwave/widgets/BuildNSendMsgs.dart';
+import 'package:wanderwave/screens/expenses/BuildNSendMsgs.dart';
 
 class GroupChatScreen extends StatefulWidget {
   final String groupId;

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wanderwave/screens/expenses_screen.dart';
+import 'package:wanderwave/screens/expenses/expenses_screen.dart';
 import 'package:wanderwave/screens/profile/edit_profile_screen.dart';
 import 'package:wanderwave/services/firebase_auth_methods.dart';
 import 'package:wanderwave/widgets/auth_icon_button.dart';
