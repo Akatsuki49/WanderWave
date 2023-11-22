@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:wanderwave/widgets/BuildNSendMsgs.dart';
 
 class GroupChatScreen extends StatefulWidget {
   final String groupId;
@@ -13,8 +14,41 @@ class GroupChatScreen extends StatefulWidget {
 
 class _GroupChatScreenState extends State<GroupChatScreen> {
   final TextEditingController _messageController = TextEditingController();
+  Map<String, bool> checkboxStates = {}; // Store checkbox states by user ID
 
   bool sendingExpense = false;
+
+  void initState() {
+    super.initState();
+    //fetch the checkbox states from firebase and store them in the checkboxStates map:
+    fetchCheckboxStates();
+  }
+
+  Future<void> fetchCheckboxStates() async {
+    try {
+      // Retrieve user's expenses data from Firestore
+      QuerySnapshot userExpensesQuery = await FirebaseFirestore.instance
+          .collection('groups')
+          .doc(widget.groupId)
+          .collection('users_expenses')
+          .get();
+
+      if (userExpensesQuery.docs.isNotEmpty) {
+        for (var doc in userExpensesQuery.docs) {
+          Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+          if (userData != null) {
+            checkboxStates[doc.id] = userData['paid'] ?? false;
+          }
+        }
+
+        print(checkboxStates);
+
+        setState(() {});
+      }
+    } catch (e) {
+      print('Error fetching checkbox states: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +79,16 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                   reverse: true,
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
+                    String msg_id = messages[index].id;
                     Map<String, dynamic> messageData =
                         messages[index].data() as Map<String, dynamic>;
 
                     if (messageData.containsKey('expense')) {
-                      return buildExpenseMessage(messageData);
+                      // return buildExpenseMessage(messageData);
+                      return buildExpenseMessage(
+                          messageData, widget.groupId, msg_id);
                     } else {
-                      return buildGenericMessage(messageData);
+                      return BuildNSendMsgs.buildGenericMessage(messageData);
                     }
                   },
                 );
@@ -84,10 +121,10 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                   icon: Icon(Icons.send),
                   onPressed: () {
                     if (sendingExpense) {
-                      sendExpenseMessage(widget.groupId, widget.userId,
-                          _messageController.text.trim());
+                      BuildNSendMsgs.sendExpenseMessage(widget.groupId,
+                          widget.userId, _messageController.text.trim());
                     } else {
-                      sendMessage(widget.groupId, widget.userId,
+                      BuildNSendMsgs.sendMessage(widget.groupId, widget.userId,
                           _messageController.text.trim());
                     }
                     _messageController.clear();
@@ -104,11 +141,13 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     );
   }
 
-  Widget buildExpenseMessage(Map<String, dynamic> messageData) {
+  Widget buildExpenseMessage(
+      Map<String, dynamic> messageData, String groupId, String msg_id) {
+    String currentUserId = widget.userId;
     return StreamBuilder<DocumentSnapshot>(
       stream: FirebaseFirestore.instance
           .collection('groups')
-          .doc(widget.groupId)
+          .doc(groupId)
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
@@ -124,202 +163,109 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             as Map<String, dynamic>; // Adjust based on your structure
 
         List<dynamic> groupMembers = groupData['members']; // Adjust as needed
-        print(groupMembers);
 
         // Calculate share per member
         int numberOfGroupMembers = groupMembers.length;
-        // double totalExpenses = double.parse(_messageController.text.trim());
         double totalExpenses = double.parse(messageData['expense']);
         double share = totalExpenses / numberOfGroupMembers;
 
-        // double totalExpenses = expensesPerMember.values
-        //     .fold(0, (previous, current) => previous + current);
-        // double share = totalExpenses / numberOfGroupMembers;
-
         // Display expenses per member
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: numberOfGroupMembers,
-          itemBuilder: (context, index) {
-            String userId = groupMembers[index];
-            // String userId = expensesPerMember.keys.elementAt(index);
-            // double userTotalExpense = expensesPerMember[userId] ?? 0;
-            return ListTile(
-              title: Row(
-                children: [
-                  Expanded(
-                    child: Text('$userId :'),
-                  ),
-                  Checkbox(
-                      onChanged: (value) {},
-                      value:
-                          false // Assign the checkbox value based on the user's payment status,
+        return Container(
+          margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12.0),
+            color: Colors.grey[200],
+          ),
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: numberOfGroupMembers,
+            //itemExtent: 120.0, // Set the height between each ListTile
+            itemBuilder: (context, index) {
+              String userId = groupMembers[index];
+              return ListTile(
+                contentPadding: EdgeInsets.all(16.0),
+                title: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '$userId :',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                ],
-              ),
-              subtitle: Text(
-                  '${totalExpenses.toStringAsFixed(2)} / $numberOfGroupMembers = ${share.toStringAsFixed(2)}'),
-            );
-          },
+                    ),
+                    Checkbox(
+                      onChanged: (value) async {
+                        String expenseId = msg_id;
+
+                        // Check if the current user is the message sender
+                        String senderId = messageData['userId'];
+                        if (senderId == currentUserId) {
+                          // Only allow changes if the current user sent the expense message
+
+                          DocumentReference userExpenseRef = FirebaseFirestore
+                              .instance
+                              .collection('groups')
+                              .doc(groupId)
+                              .collection('users_expenses')
+                              .doc(userId);
+
+                          DocumentSnapshot userExpenseSnapshot =
+                              await userExpenseRef.get();
+
+                          if (userExpenseSnapshot.exists) {
+                            Map<String, dynamic> userData = userExpenseSnapshot
+                                .data() as Map<String, dynamic>;
+
+                            if (userData.isNotEmpty &&
+                                userData['expense_id'] == expenseId) {
+                              userData['paid'] = value;
+                              await userExpenseRef.set(userData);
+                              print('Expense status updated for user: $userId');
+                              setState(() {
+                                checkboxStates[userId] = value ?? false;
+                              });
+                            }
+                          }
+                        } else {
+                          // Show error message or dialog indicating the user isn't authorized
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Access Denied'),
+                                content: Text('Only message admin can edit.'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      },
+                      value: checkboxStates[userId] ?? false,
+                    ),
+                  ],
+                ),
+                subtitle: Text(
+                  '${totalExpenses.toStringAsFixed(2)} / $numberOfGroupMembers = ${share.toStringAsFixed(2)}',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              );
+            },
+          ),
         );
       },
     );
   }
-
-  // Widget buildExpenseMessage(
-  //     Map<String, dynamic> messageData, List<DocumentSnapshot> messages) {
-  //   // Calculate expenses per member
-  //   Map<String, double> expensesPerMember = {};
-
-  //   for (var message in messages) {
-  //     Map<String, dynamic> messageData = message.data() as Map<String, dynamic>;
-
-  //     if (messageData.containsKey('expense')) {
-  //       String userId = messageData['userId'];
-  //       double expense = double.parse(messageData['expense']);
-
-  //       if (userId != widget.userId) {
-  //         expensesPerMember[userId] =
-  //             (expensesPerMember[userId] ?? 0) + expense;
-  //       }
-  //     }
-  //   }
-
-  //   // Calculate share per member
-  //   int numberOfGroupMembers =
-  //       expensesPerMember.length + 1; // +1 for current user
-  //   double totalExpenses = expensesPerMember.values
-  //       .fold(0, (previous, current) => previous + current);
-  //   double share = totalExpenses / numberOfGroupMembers;
-
-  //   // Display expenses per member
-  //   return ListView.builder(
-  //       shrinkWrap: true,
-  //       itemCount: expensesPerMember.length,
-  //       itemBuilder: (context, index) {
-  //         String userId = expensesPerMember.keys.elementAt(index);
-  //         double userTotalExpense = expensesPerMember[userId] ?? 0;
-  //         return ListTile(
-  //           title: Text(
-  //               '$userId : ${userTotalExpense.toStringAsFixed(2)} / $numberOfGroupMembers = ${share.toStringAsFixed(2)}'),
-  //         );
-  //       });
-  //   // return ListTile(
-  //   //   title: Text('${messageData['userId']} : ${messageData['expense']}'),
-  //   //   subtitle: Checkbox(
-  //   //     value: messageData['paid'] ?? false,
-  //   //     onChanged: (bool? value) {
-  //   //       // Handle checkbox change
-  //   //       // You may update Firestore to mark the expense as paid here
-  //   //     },
-  //   //   ),
-  //   // );
-  // }
-
-  Widget buildGenericMessage(Map<String, dynamic> messageData) {
-    return ListTile(
-      title: Text(messageData['text']),
-      subtitle: Text(messageData['from']),
-    );
-  }
-
-  Future<void> sendMessage(String groupId, String senderId, String text) async {
-    CollectionReference messagesRef = FirebaseFirestore.instance
-        .collection('groups')
-        .doc(groupId)
-        .collection('messages');
-
-    await messagesRef.add({
-      'text': text,
-      'from': senderId,
-      'timestamp': FieldValue.serverTimestamp(),
-    });
-  }
-
-  Future<void> sendExpenseMessage(
-      String groupId, String senderId, String expenseAmount) async {
-    CollectionReference messagesRef = FirebaseFirestore.instance
-        .collection('groups')
-        .doc(groupId)
-        .collection('messages');
-
-    // Fetch group members
-    DocumentSnapshot groupSnapshot = await FirebaseFirestore.instance
-        .collection('groups')
-        .doc(groupId)
-        .get();
-
-    if (!groupSnapshot.exists) {
-      print('Group not found');
-      return; // Exit function if group is not found
-    }
-
-    Map<String, dynamic> groupData =
-        groupSnapshot.data() as Map<String, dynamic>;
-
-    List<dynamic> groupMembers = groupData['members'];
-
-    // Calculate share per member
-    int numberOfGroupMembers = groupMembers.length;
-    double totalExpenses = double.parse(expenseAmount);
-    double share = totalExpenses / numberOfGroupMembers;
-
-    // Calculate each user's expense to be paid
-    Map<String, double> expensesToBePaid = {};
-
-    for (var userId in groupMembers) {
-      expensesToBePaid[userId] = share;
-    }
-
-    // Add the overall expense to the messages collection
-    DocumentReference expenseDocRef = await messagesRef.add({
-      'expense': expenseAmount,
-      'userId': senderId,
-      'paid': false,
-      'timestamp': FieldValue.serverTimestamp(),
-    });
-
-    String newExpenseId = expenseDocRef.id; // Get the newly created expense ID
-
-// Add the expenses to Firestore for each user with the new expense ID
-    for (var entry in expensesToBePaid.entries) {
-      String userId = entry.key;
-      double amountToPay = entry.value;
-
-      // Reference to the user's document in Firestore
-      DocumentReference userExpenseRef = FirebaseFirestore.instance
-          .collection('groups')
-          .doc(groupId)
-          .collection('users_expenses')
-          .doc(userId);
-
-      // Update the user's document with the expense to be paid
-      await userExpenseRef.set({
-        'expense_id': newExpenseId, // Assign the new expense ID
-        'amountToPay': amountToPay,
-        'paid': false, // You might want to set this to false initially
-        // You can include other necessary fields here
-      });
-    }
-
-    print('Expenses added successfully');
-  }
-
-  // Future<void> sendExpenseMessage(
-  //     String groupId, String senderId, String expenseAmount) async {
-  //   CollectionReference messagesRef = FirebaseFirestore.instance
-  //       .collection('groups')
-  //       .doc(groupId)
-  //       .collection('messages');
-
-  //   await messagesRef.add({
-  //     'expense': expenseAmount,
-  //     'userId': senderId,
-  //     'paid': false,
-  //     'timestamp': FieldValue.serverTimestamp(),
-  //   });
-
-  //   // Add logic here to trigger daily reminders for unpaid expenses
-  //   // You can use scheduled notifications or cloud functions to handle reminders
-  // }
 }
