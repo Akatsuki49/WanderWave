@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wanderwave/screens/profile_screen.dart';
+import 'package:wanderwave/screens/profile/profile_screen.dart';
 import 'package:wanderwave/services/firebase_auth_methods.dart';
 import 'package:wanderwave/widgets/auth_textfield.dart';
 

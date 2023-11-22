@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wanderwave/screens/Diary/diary_screen.dart';
 import 'package:wanderwave/screens/expenses_screen.dart';
 import 'package:wanderwave/screens/itinerary_screen.dart';
-import 'package:wanderwave/screens/profile_screen.dart';
+import 'package:wanderwave/screens/profile/profile_screen.dart';
 import 'package:wanderwave/widgets/bottom_bar.dart';
 
 class HomeScreen extends StatefulWidget {
