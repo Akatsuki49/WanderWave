@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import 'package:wanderwave/widgets/group_list_helper.dart';
+import 'package:wanderwave/screens/expenses/group_list_helper.dart';
 
 class ExpensesScreen extends StatefulWidget {
   @override
