@@ -182,7 +182,8 @@ class _ItineraryEntryPageState extends State<ItineraryEntryPage> {
     // For simplicity, we'll just check if all fields are non-empty
     return destinationController.text.isNotEmpty &&
         startDate != null &&
-        endDate != null &&
-        activitiesController.text.isNotEmpty;
+      endDate != null &&
+      activitiesController.text.isNotEmpty &&
+      startDate!.isBefore(endDate!);
   }
 }
