@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +6,8 @@ import 'package:uuid/uuid.dart';
 import 'package:wanderwave/screens/expenses/group_list_helper.dart';
 
 class ExpensesScreen extends StatefulWidget {
+  const ExpensesScreen({super.key});
+
   @override
   State<ExpensesScreen> createState() => _ExpensesScreenState();
 }
@@ -16,6 +17,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
   final TextEditingController _newGroupNameController = TextEditingController();
   String? _userId;
 
+  @override
   void initState() {
     super.initState();
     _getCurrentUser();
@@ -25,10 +27,10 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Groups'),
+        title: const Text('Groups'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -38,16 +40,16 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                 _newGroupNameController.clear();
                 setState(() {});
               },
-              child: Text('Create Group'),
+              child: const Text('Create Group'),
             ),
             TextField(
               controller: _newGroupNameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'New Group Name',
               ),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Your Groups',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
@@ -56,7 +58,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                 future: getUserGroups(_userId),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else {
                     List<DocumentSnapshot>? groups = snapshot.data;
                     bool noGroups = groups == null || groups.isEmpty;
@@ -69,13 +71,13 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                               onJoinPressed: () {
                                 _showJoinGroupDialog(context);
                               }),
-                          if (noGroups) Center(child: Text('No groups yet.')),
-                          SizedBox(height: 20),
+                          if (noGroups) const Center(child: Text('No groups yet.')),
+                          const SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: () {
                               _showJoinGroupDialog(context);
                             },
-                            child: Text('Join Group'),
+                            child: const Text('Join Group'),
                           ),
                         ],
                       ),
@@ -95,10 +97,10 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Join Group'),
+          title: const Text('Join Group'),
           content: TextField(
             controller: _joinGroupIdController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Enter Group ID',
             ),
           ),
@@ -107,7 +109,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -116,7 +118,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                 _joinGroupIdController.clear();
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('Join'),
+              child: const Text('Join'),
             ),
           ],
         );
@@ -148,14 +150,14 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error'),
-            content: Text('Group ID does not exist.'),
+            title: const Text('Error'),
+            content: const Text('Group ID does not exist.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -165,7 +167,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
   }
 
   Future<void> createGroup(String? userId, String groupName) async {
-    var groupId = Uuid().v4(); // Generate a UUID for group ID
+    var groupId = const Uuid().v4(); // Generate a UUID for group ID
     await FirebaseFirestore.instance.collection('groups').doc(groupId).set({
       'members': [userId],
       'group_name': groupName,

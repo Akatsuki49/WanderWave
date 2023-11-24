@@ -15,7 +15,7 @@ void travelDiarySnackBar(BuildContext context, String message) {
     SnackBar(
       content: Text(message),
       backgroundColor: Colors.black,
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
     ),
   );
 }

@@ -53,14 +53,35 @@ class _ItineraryListState extends State<ItineraryList> {
             });
           }).toList();
 
+          if (itineraries.isEmpty) {
+            // Display a message and an image when there are no entries
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Plan your Itinerary',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  const SizedBox(height: 10),
+                  Image.asset(
+                    'assets/itinerary.png', // Replace with your image path
+                    width: 200,
+                    height: 200,
+                  ),
+                ],
+              ),
+            );
+          }
+
           return ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             itemCount: itineraries.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-            final itinerary = itineraries[index];
-            return Itinerary(itinerary, currentUserId: user.uid);
-            // Make sure to pass the currentUserId here
+              final itinerary = itineraries[index];
+              return Itinerary(itinerary, currentUserId: user.uid);
+              // Make sure to pass the currentUserId here
             },
           );
         },

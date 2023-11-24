@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 class ViewTravelEntryDetailsScreen extends StatelessWidget {
   final TravelDiaryEntry entry;
 
-  ViewTravelEntryDetailsScreen(this.entry);
+  const ViewTravelEntryDetailsScreen(this.entry, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +45,13 @@ class ViewTravelEntryDetailsScreen extends StatelessWidget {
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
-        placeholder: (context, url) => CircularProgressIndicator(),
-        errorWidget: (context, url, error) => Icon(Icons.error),
+        placeholder: (context, url) => const CircularProgressIndicator(),
+        errorWidget: (context, url, error) => const Icon(Icons.error),
       );
     } else {
       // If multiple images, create a responsive grid
       return GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
@@ -61,8 +61,8 @@ class ViewTravelEntryDetailsScreen extends StatelessWidget {
           return CachedNetworkImage(
             imageUrl: imageUrls[index],
             fit: BoxFit.cover,
-            placeholder: (context, url) => CircularProgressIndicator(),
-            errorWidget: (context, url, error) => Icon(Icons.error),
+            placeholder: (context, url) => const CircularProgressIndicator(),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
           );
         },
       );

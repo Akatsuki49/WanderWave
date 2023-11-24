@@ -5,6 +5,8 @@ import 'package:wanderwave/models/travel_diary_model.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 class AddTravelEntryScreen extends StatefulWidget {
+  const AddTravelEntryScreen({super.key});
+
   @override
   _AddTravelEntryScreenState createState() => _AddTravelEntryScreenState();
 }
@@ -22,7 +24,7 @@ class _AddTravelEntryScreenState extends State<AddTravelEntryScreen> {
         maxImages: 5,
         enableCamera: true,
       );
-    } on Exception catch (e) {
+    } on Exception {
       // Handle the exception
     }
 
@@ -65,7 +67,7 @@ class _AddTravelEntryScreenState extends State<AddTravelEntryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Add Travel Entry',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -73,25 +75,25 @@ class _AddTravelEntryScreenState extends State<AddTravelEntryScreen> {
             color: Colors.black,
           ),
         ),
-        backgroundColor: Color(0xffb2d8d8),
+        backgroundColor: const Color(0xffb2d8d8),
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-      backgroundColor: Color(0xffb2d8d8),
+      backgroundColor: const Color(0xffb2d8d8),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          color: Color(0xFFC4E4E4),
+          color: const Color(0xFFC4E4E4),
           elevation: 20,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Capture Your Journey',
                   style: TextStyle(
                     fontSize: 24,
@@ -99,7 +101,7 @@ class _AddTravelEntryScreenState extends State<AddTravelEntryScreen> {
                     color: Colors.black87,
                   ),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -109,21 +111,21 @@ class _AddTravelEntryScreenState extends State<AddTravelEntryScreen> {
                         color: Colors.grey.withOpacity(0.4),
                         spreadRadius: 3,
                         blurRadius: 10,
-                        offset: Offset(0, 5),
+                        offset: const Offset(0, 5),
                       ),
                     ],
                   ),
                   child: TextField(
                     controller: titleController,
-                    style: TextStyle(fontSize: 18),
-                    decoration: InputDecoration(
+                    style: const TextStyle(fontSize: 18),
+                    decoration: const InputDecoration(
                       labelText: 'Title',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(16),
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -133,37 +135,37 @@ class _AddTravelEntryScreenState extends State<AddTravelEntryScreen> {
                         color: Colors.grey.withOpacity(0.4),
                         spreadRadius: 3,
                         blurRadius: 10,
-                        offset: Offset(0, 5),
+                        offset: const Offset(0, 5),
                       ),
                     ],
                   ),
                   child: TextField(
                     controller: descriptionController,
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                     maxLines: 4, // Allowing multiple lines for description
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Description',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(16),
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _pickImages,
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF66B2B2),
+                    backgroundColor: const Color(0xFF66B2B2),
                     elevation: 8,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: Text('Pick Images', style: TextStyle(fontSize: 18)),
+                  child: const Text('Pick Images', style: TextStyle(fontSize: 18)),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 selectedImages.isNotEmpty
                     ? GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
                           crossAxisSpacing: 8.0,
                           mainAxisSpacing: 8.0,
@@ -179,7 +181,7 @@ class _AddTravelEntryScreenState extends State<AddTravelEntryScreen> {
                                   color: Colors.grey.withOpacity(0.4),
                                   spreadRadius: 3,
                                   blurRadius: 10,
-                                  offset: Offset(0, 5),
+                                  offset: const Offset(0, 5),
                                 ),
                               ],
                             ),
@@ -192,20 +194,20 @@ class _AddTravelEntryScreenState extends State<AddTravelEntryScreen> {
                         },
                       )
                     : Container(),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 isUploading
-                    ? CircularProgressIndicator()
+                    ? const CircularProgressIndicator()
                     : ElevatedButton(
                         onPressed: _addEntry,
                         style: ElevatedButton.styleFrom(
-                          primary: Color(0xFF66B2B2),
+                          backgroundColor: const Color(0xFF66B2B2),
                           elevation: 8,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         child:
-                            Text('Add Entry', style: TextStyle(fontSize: 18)),
+                            const Text('Add Entry', style: TextStyle(fontSize: 18)),
                       ),
               ],
             ),

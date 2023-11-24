@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wanderwave/services/firebase_auth_methods.dart';
@@ -18,10 +17,10 @@ class GroupListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (groups == null || groups!.isEmpty) {
-      return Center(child: Text('No groups yet.'));
+      return const Center(child: Text('No groups yet.'));
     } else {
       return ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: groups!.length,
         itemBuilder: (context, index) {
@@ -52,7 +51,7 @@ class GroupListWidget extends StatelessWidget {
                     color: Colors.grey.withOpacity(0.17),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(0, 3), // changes the shadow direction
+                    offset: const Offset(0, 3), // changes the shadow direction
                   ),
                 ],
               ),

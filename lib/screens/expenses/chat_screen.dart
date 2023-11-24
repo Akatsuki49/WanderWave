@@ -6,7 +6,7 @@ class GroupChatScreen extends StatefulWidget {
   final String groupId;
   final String userId;
 
-  GroupChatScreen({required this.groupId, required this.userId});
+  const GroupChatScreen({super.key, required this.groupId, required this.userId});
 
   @override
   _GroupChatScreenState createState() => _GroupChatScreenState();
@@ -18,6 +18,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
 
   bool sendingExpense = false;
 
+  @override
   void initState() {
     super.initState();
     //fetch the checkbox states from firebase and store them in the checkboxStates map:
@@ -38,15 +39,13 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
           Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
 
           // Assuming the structure directly contains expenses using their IDs
-          if (userData != null) {
-            // Loop through each expense directly within user's data
-            userData.forEach((expenseId, expenseData) {
-              bool paid = expenseData['paid'] ?? false;
-              // Assuming the document ID is user ID, and expenseId is unique
-              checkboxStates[doc.id + "_" + expenseId] = paid;
-            });
-          }
-        }
+          // Loop through each expense directly within user's data
+          userData.forEach((expenseId, expenseData) {
+            bool paid = expenseData['paid'] ?? false;
+            // Assuming the document ID is user ID, and expenseId is unique
+            checkboxStates["${doc.id}_$expenseId"] = paid;
+          });
+                }
 
         print(checkboxStates);
         setState(() {});
@@ -60,7 +59,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Group Chat'),
+        title: const Text('Group Chat'),
       ),
       body: Column(
         children: [
@@ -74,7 +73,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
@@ -85,14 +84,14 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                   reverse: true,
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
-                    String msg_id = messages[index].id;
+                    String msgId = messages[index].id;
                     Map<String, dynamic> messageData =
                         messages[index].data() as Map<String, dynamic>;
 
                     if (messageData.containsKey('expense')) {
                       // return buildExpenseMessage(messageData);
                       return buildExpenseMessage(
-                          messageData, widget.groupId, msg_id);
+                          messageData, widget.groupId, msgId);
                     } else {
                       return BuildNSendMsgs.buildGenericMessage(messageData);
                     }
@@ -116,7 +115,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.attach_money),
+                  icon: const Icon(Icons.attach_money),
                   onPressed: () {
                     setState(() {
                       sendingExpense = !sendingExpense;
@@ -124,7 +123,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: () {
                     if (sendingExpense) {
                       BuildNSendMsgs.sendExpenseMessage(widget.groupId,
@@ -148,7 +147,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   }
 
   Widget buildExpenseMessage(
-      Map<String, dynamic> messageData, String groupId, String msg_id) {
+      Map<String, dynamic> messageData, String groupId, String msgId) {
     String currentUserId = widget.userId;
     return StreamBuilder<DocumentSnapshot>(
       stream: FirebaseFirestore.instance
@@ -157,11 +156,11 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
 
         if (!snapshot.data!.exists) {
-          return Text('Group not found');
+          return const Text('Group not found');
         }
 
         // Fetch group members
@@ -177,26 +176,26 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
 
         // Display expenses per member
         return Container(
-          margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12.0),
             color: Colors.grey[200],
           ),
           child: ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: numberOfGroupMembers,
             //itemExtent: 120.0, // Set the height between each ListTile
             itemBuilder: (context, index) {
               String userId = groupMembers[index];
               return ListTile(
-                contentPadding: EdgeInsets.all(16.0),
+                contentPadding: const EdgeInsets.all(16.0),
                 title: Row(
                   children: [
                     Expanded(
                       child: Text(
                         '$userId :',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -204,7 +203,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                     ),
                     Checkbox(
                       onChanged: (value) async {
-                        String expenseId = msg_id;
+                        String expenseId = msgId;
 
                         // Check if the current user is the message sender
                         String senderId = messageData['userId'];
@@ -232,9 +231,9 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                               print('Expense status updated for user: $userId');
                               setState(() {
                                 // Update the checkbox state for the specific user
-                                print(userId + "_" + expenseId);
-                                print(userId + "_" + msg_id);
-                                checkboxStates[userId + "_" + expenseId] =
+                                print("${userId}_$expenseId");
+                                print("${userId}_$msgId");
+                                checkboxStates["${userId}_$expenseId"] =
                                     value ?? false;
                                 print(checkboxStates);
                                 //checkboxStates[userId] = value ?? false;
@@ -247,14 +246,14 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Text('Access Denied'),
-                                content: Text('Only message admin can edit.'),
+                                title: const Text('Access Denied'),
+                                content: const Text('Only message admin can edit.'),
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    child: Text('OK'),
+                                    child: const Text('OK'),
                                   ),
                                 ],
                               );
@@ -262,7 +261,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                           );
                         }
                       },
-                      value: checkboxStates[userId + "_" + msg_id] ?? false,
+                      value: checkboxStates["${userId}_$msgId"] ?? false,
                     ),
                   ],
                 ),

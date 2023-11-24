@@ -21,20 +21,21 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
     Provider.of<TravelDiaryProvider>(context, listen: false).fetchEntries();
   }
 
+  @override
   Widget build(BuildContext context) {
     print('TravelDiaryScreen build');
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Color(0xffb2d8d8),
+      backgroundColor: const Color(0xffb2d8d8),
       appBar: AppBar(
         title: const Text('My Diary',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
                 color: Colors.black)),
-        backgroundColor: Color(0xffb2d8d8), // Subtle green color
+        backgroundColor: const Color(0xffb2d8d8), // Subtle green color
         elevation: 0,
       ),
       body: Consumer<TravelDiaryProvider>(
@@ -44,7 +45,7 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
           if (!travelDiaryProvider.entriesFetched) {
             // Entries are still being fetched, show a loading indicator or
             // a different message.
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -53,7 +54,7 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
                   child: Column(
                     children: [
                       SizedBox(height: height * 0.15),
-                      Text(
+                      const Text(
                         'Journal Your Entry',
                         style: TextStyle(
                           fontSize: 20,
@@ -81,7 +82,7 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
                             .deleteEntry(entry.id);
                         // Show feedback for deletion
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text("Entry deleted"),
                             duration: Duration(seconds: 2),
                           ),
@@ -93,19 +94,19 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text("Delete Entry"),
-                              content: Text(
+                              title: const Text("Delete Entry"),
+                              content: const Text(
                                   "Are you sure you want to delete this entry?"),
                               actions: <Widget>[
                                 TextButton(
                                   onPressed: () =>
                                       Navigator.of(context).pop(false),
-                                  child: Text("No"),
+                                  child: const Text("No"),
                                 ),
                                 TextButton(
                                   onPressed: () =>
                                       Navigator.of(context).pop(true),
-                                  child: Text("Yes"),
+                                  child: const Text("Yes"),
                                 ),
                               ],
                             );
@@ -114,16 +115,16 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
                       },
                       background: Container(
                         color: Colors.red,
-                        child: Icon(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 20),
+                        child: const Icon(
                           Icons.delete,
                           color: Colors.white,
                           size: 36,
                         ),
-                        alignment: Alignment.centerRight,
-                        padding: EdgeInsets.only(right: 20),
                       ),
                       child: AnimatedSwitcher(
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         child: Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
@@ -131,7 +132,7 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
                           key: ValueKey(entry.id),
                           elevation: 4,
                           margin:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           child: InkWell(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
@@ -146,12 +147,12 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
                                     ? CachedNetworkImage(
                                         imageUrl: entry.imageUrls[
                                             0], //first image for thumbnail lol
-                                        placeholder: (context, url) => Padding(
-                                          padding: const EdgeInsets.all(8.0),
+                                        placeholder: (context, url) => const Padding(
+                                          padding: EdgeInsets.all(8.0),
                                           child: CircularProgressIndicator(),
                                         ),
                                         errorWidget: (context, url, error) =>
-                                            Icon(Icons.error),
+                                            const Icon(Icons.error),
                                       )
                                     : Container(),
                                 Padding(
@@ -166,7 +167,7 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: Text(
                                               entry.title,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 24,
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors
@@ -174,9 +175,9 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
                                                   ),
                                             ),
                                           ),
-                                          Spacer(),
+                                          const Spacer(),
                                           IconButton(
-                                            icon: Icon(
+                                            icon: const Icon(
                                               Icons.delete,
                                               color: Colors.red,
                                             ),
@@ -187,8 +188,8 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
                                                 builder:
                                                     (BuildContext context) {
                                                   return AlertDialog(
-                                                    title: Text("Delete Entry"),
-                                                    content: Text(
+                                                    title: const Text("Delete Entry"),
+                                                    content: const Text(
                                                         "Are you sure you want to delete this entry?"),
                                                     actions: <Widget>[
                                                       TextButton(
@@ -196,7 +197,7 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
                                                             Navigator.of(
                                                                     context)
                                                                 .pop(),
-                                                        child: Text("Cancel"),
+                                                        child: const Text("Cancel"),
                                                       ),
                                                       TextButton(
                                                         onPressed: () {
@@ -213,7 +214,7 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
                                                           Navigator.of(context)
                                                               .pop();
                                                         },
-                                                        child: Text("Delete"),
+                                                        child: const Text("Delete"),
                                                       ),
                                                     ],
                                                   );
@@ -230,7 +231,7 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
                                           entry.description,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             color: Colors.grey,
                                           ),
                                         ),
@@ -253,10 +254,10 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
         child: FloatingActionButton.extended(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => AddTravelEntryScreen(),
+              builder: (context) => const AddTravelEntryScreen(),
             ));
           },
-          label: Text(
+          label: const Text(
             "Add entry",
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -265,7 +266,7 @@ class _TravelDiaryScreenState extends State<TravelDiaryScreen> {
             ),
           ),
           icon: Image.asset('assets/add_entry.png', height: 28, width: 28),
-          backgroundColor: Color(0xFF66B2B2), // Updated color
+          backgroundColor: const Color(0xFF66B2B2), // Updated color
         ),
       ),
     );
