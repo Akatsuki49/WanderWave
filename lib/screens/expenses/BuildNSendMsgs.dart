@@ -71,13 +71,6 @@ class BuildNSendMsgs {
     double totalExpenses = double.parse(expenseAmount);
     double share = totalExpenses / numberOfGroupMembers;
 
-    // Calculate each user's expense to be paid
-    Map<String, double> expensesToBePaid = {};
-
-    for (var userId in groupMembers) {
-      expensesToBePaid[userId] = share;
-    }
-
     // Add the overall expense to the messages collection
     DocumentReference expenseDocRef = await messagesRef.add({
       'expense': expenseAmount,
@@ -88,25 +81,33 @@ class BuildNSendMsgs {
 
     String newExpenseId = expenseDocRef.id; // Get the newly created expense ID
 
-// Add the expenses to Firestore for each user with the new expense ID
-    for (var entry in expensesToBePaid.entries) {
-      String userId = entry.key;
-      double amountToPay = entry.value;
-
+    // Add the expenses to Firestore for each user with the new expense ID
+    for (var userId in groupMembers) {
       // Reference to the user's document in Firestore
       DocumentReference userExpenseRef = FirebaseFirestore.instance
           .collection('groups')
           .doc(groupId)
-          .collection('users_expenses')
+          .collection(
+              'users_expenses') // Points directly to user_expenses collection
           .doc(userId);
 
-      // Update the user's document with the expense to be paid
-      await userExpenseRef.set({
-        'expense_id': newExpenseId, // Assign the new expense ID
-        'amountToPay': amountToPay,
-        'paid': false, // You might want to set this to false initially
-        // You can include other necessary fields here
-      });
+      // Get user's expenses data if it exists, otherwise, create a new document
+      DocumentSnapshot userExpenseSnapshot = await userExpenseRef.get();
+      Map<String, dynamic> userData = {};
+
+      if (userExpenseSnapshot.exists) {
+        userData = userExpenseSnapshot.data() as Map<String, dynamic>;
+      }
+
+      // Update or create the expenses map for the new expense ID
+      userData[newExpenseId] = {
+        'expense': share, // Assign share for each user
+        'paid': false, // Initially set to false
+        // Include other necessary fields here
+      };
+
+      // Update or set the user's expenses data in Firestore
+      await userExpenseRef.set(userData);
     }
 
     print('Expenses added successfully');
