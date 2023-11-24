@@ -137,10 +137,31 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
   // Method to join a group
   void _joinGroup(String groupId) async {
-    await joinGroup(groupId, _userId!); // Assuming _userId is not null
-    setState(() {
-      // Refresh the UI after joining a group
-    });
+    bool joined =
+        await joinGroup(groupId, _userId!); // Assuming _userId is not null
+    if (joined) {
+      setState(() {
+        // Refresh the UI after joining a group
+      });
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Group ID does not exist.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   Future<void> createGroup(String? userId, String groupName) async {
@@ -152,15 +173,16 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
     });
   }
 
-  Future<void> joinGroup(String? groupId, String userId) async {
+  Future<bool> joinGroup(String? groupId, String userId) async {
     var groupDoc = FirebaseFirestore.instance.collection('groups').doc(groupId);
     var group = await groupDoc.get();
     if (group.exists) {
       await groupDoc.update({
         'members': FieldValue.arrayUnion([userId]),
       });
+      return true; // Successfully joined the group
     } else {
-      // Handle non-existent group
+      return false; // Group doesn't exist
     }
   }
 
