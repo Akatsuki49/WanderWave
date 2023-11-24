@@ -43,6 +43,7 @@ class GroupListWidget extends StatelessWidget {
               );
             },
             child: Container(
+              margin: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 borderRadius:
                     BorderRadius.circular(10), // Adjust the value for roundness
