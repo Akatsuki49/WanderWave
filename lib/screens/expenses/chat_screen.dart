@@ -36,13 +36,19 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
       if (userExpensesQuery.docs.isNotEmpty) {
         for (var doc in userExpensesQuery.docs) {
           Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+
+          // Assuming the structure directly contains expenses using their IDs
           if (userData != null) {
-            checkboxStates[doc.id] = userData['paid'] ?? false;
+            // Loop through each expense directly within user's data
+            userData.forEach((expenseId, expenseData) {
+              bool paid = expenseData['paid'] ?? false;
+              // Assuming the document ID is user ID, and expenseId is unique
+              checkboxStates[doc.id + "_" + expenseId] = paid;
+            });
           }
         }
 
         print(checkboxStates);
-
         setState(() {});
       }
     } catch (e) {
@@ -219,13 +225,19 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                             Map<String, dynamic> userData = userExpenseSnapshot
                                 .data() as Map<String, dynamic>;
 
-                            if (userData.isNotEmpty &&
-                                userData['expense_id'] == expenseId) {
-                              userData['paid'] = value;
+                            // Check if the expense exists for the given message ID
+                            if (userData.containsKey(expenseId)) {
+                              userData[expenseId]['paid'] = value;
                               await userExpenseRef.set(userData);
                               print('Expense status updated for user: $userId');
                               setState(() {
-                                checkboxStates[userId] = value ?? false;
+                                // Update the checkbox state for the specific user
+                                print(userId + "_" + expenseId);
+                                print(userId + "_" + msg_id);
+                                checkboxStates[userId + "_" + expenseId] =
+                                    value ?? false;
+                                print(checkboxStates);
+                                //checkboxStates[userId] = value ?? false;
                               });
                             }
                           }
@@ -250,7 +262,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                           );
                         }
                       },
-                      value: checkboxStates[userId] ?? false,
+                      value: checkboxStates[userId + "_" + msg_id] ?? false,
                     ),
                   ],
                 ),
