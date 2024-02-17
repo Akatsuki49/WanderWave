@@ -30,12 +30,17 @@ class LandingPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: screenHeight * 0.1),
-              SvgPicture.asset(
-                '/Users/shubh/development/WealHack/frontend/emosense/assets/images/bhai.svg',
-                width: screenWidth * 0.1,
-                height: screenHeight * 0.1,
+              Image.asset(
+                'assets/images/bhai.png',
+                width: screenWidth * 0.5,
+                height: screenHeight * 0.5,
               ),
-              SizedBox(height: screenHeight * 0.25),
+              // // SvgPicture.asset(
+              // //   '/Users/shubh/development/WealHack/frontend/emosense/assets/images/bhai.svg',
+              //   width: screenWidth * 0.1,
+              //   height: screenHeight * 0.1,
+              // ),
+              SizedBox(height: screenHeight * 0.1),
 
               //get started button :
               GestureDetector(
@@ -43,10 +48,16 @@ class LandingPage extends StatelessWidget {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => LoginScreen()));
                 },
-                child: SvgPicture.asset(
-                  '/Users/shubh/development/WealHack/frontend/emosense/assets/images/get_started.svg',
-                  width: screenWidth * 0.06,
-                  height: screenHeight * 0.06,
+                //   child: SvgPicture.asset(
+                //     '/Users/shubh/development/WealHack/frontend/emosense/assets/images/get_started.svg',
+                //     width: screenWidth * 0.06,
+                //     height: screenHeight * 0.06,
+                //   ),
+                // ),
+                child: Image.asset(
+                  'assets/images/get_started.png',
+                  width: screenWidth * 0.6,
+                  height: screenHeight * 0.2,
                 ),
               ),
             ],

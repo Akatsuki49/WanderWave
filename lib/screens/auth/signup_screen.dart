@@ -1,3 +1,4 @@
+import 'package:emosense/widgets/pass_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -69,7 +70,7 @@ class _EmailPasswordSignupState extends State<EmailPasswordSignup> {
             const SizedBox(height: 20),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
-              child: AuthTextField(
+              child: PasswordTextField(
                 controller: passwordController,
                 hintText: 'Enter your password',
               ),

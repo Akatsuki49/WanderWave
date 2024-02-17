@@ -1,3 +1,4 @@
+import 'package:emosense/widgets/google_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -47,20 +48,15 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const SizedBox(height: 60),
               SvgPicture.asset(
-                '/Users/shubh/development/WealHack/frontend/emosense/assets/images/bhai.svg',
+                'assets/images/bhai.svg',
                 width: screenWidth * 0.1,
                 height: screenHeight * 0.1,
               ),
               const SizedBox(height: 100),
-              AuthIconButton(
-                labelText: 'Sign in with Google',
-                isSvg: true,
-                icon: SvgPicture.asset(
-                  '/Users/shubh/development/WealHack/frontend/emosense/assets/google_icon.svg',
-                  height: 30,
-                ),
-                onPress: onGoogleSignIn,
-              ),
+              GoogleIconButton(
+                  labelText: 'Sign in with Google',
+                  imagePath: 'frontend/emosense/assets/images/google_icon.png',
+                  onPress: onGoogleSignIn),
               const SizedBox(height: 15),
               const OrDivider(),
               AuthIconButton(
