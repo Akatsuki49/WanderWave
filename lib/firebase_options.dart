@@ -66,6 +66,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '789774305313',
     projectId: 'bhai-b7629',
     storageBucket: 'bhai-b7629.appspot.com',
+    androidClientId: '789774305313-3vkvs3oo9f8tbecb3elir4qsbai2dnos.apps.googleusercontent.com',
     iosClientId: '789774305313-vaf56ffkstb1e0sj0vqgn37a9sr7u6np.apps.googleusercontent.com',
     iosBundleId: 'com.example.emosense',
   );
@@ -76,6 +77,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '789774305313',
     projectId: 'bhai-b7629',
     storageBucket: 'bhai-b7629.appspot.com',
+    androidClientId: '789774305313-3vkvs3oo9f8tbecb3elir4qsbai2dnos.apps.googleusercontent.com',
     iosClientId: '789774305313-25j3nhi1q42bmk0rvd0mfbtgu60t1gd5.apps.googleusercontent.com',
     iosBundleId: 'com.example.emosense.RunnerTests',
   );
