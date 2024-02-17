@@ -1,5 +1,6 @@
 import 'package:emosense/firebase_options.dart';
 import 'package:emosense/screens/auth/firebase_auth_methods.dart';
+import 'package:emosense/screens/landing_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         // Other providers if any
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'EmoSense',
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -37,7 +39,7 @@ class MyApp extends StatelessWidget {
             if (snapshot.hasData && snapshot.data != null) {
               return HomeScreen(); // If user is logged in, show home screen
             } else {
-              return LoginScreen(); // If user is not logged in, show login screen
+              return LandingPage(); // If user is not logged in, show login screen
             }
           },
         ),
